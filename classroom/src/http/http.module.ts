@@ -1,23 +1,27 @@
-import { ApolloDriver } from '@nestjs/apollo';
+import {
+  ApolloDriver,
+  ApolloFederationDriver,
+  ApolloFederationDriverConfig,
+} from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'node:path';
 import { CoursesService } from '../services/courses.service';
-import { EnrolltmentsService } from '../services/enrollments.service';
+import { EnrollmentsService } from '../services/enrollments.service';
 import { StudentsService } from '../services/students.service';
 
 import { DatabaseModule } from '../database/database.module';
 import { CourseResolver } from './graphql/resolvers/courses.resolver';
 import { EnrollmentResolver } from './graphql/resolvers/enrollment.resolver';
-import { StudentResolver } from './graphql/resolvers/student.resolver';
+import { StudentsResolver } from './graphql/resolvers/student.resolver';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     DatabaseModule,
-    GraphQLModule.forRoot({
-      driver: ApolloDriver,
+    GraphQLModule.forRoot<ApolloFederationDriverConfig>({
+      driver: ApolloFederationDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
     }),
   ],
@@ -25,11 +29,11 @@ import { StudentResolver } from './graphql/resolvers/student.resolver';
     //Resolvers
     CourseResolver,
     EnrollmentResolver,
-    StudentResolver,
+    StudentsResolver,
 
     //Services
     CoursesService,
-    EnrolltmentsService,
+    EnrollmentsService,
     StudentsService,
   ],
 })

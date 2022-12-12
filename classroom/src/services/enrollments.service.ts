@@ -12,7 +12,7 @@ interface GetByCourseAndStudentIdParams {
 }
 
 @Injectable()
-export class EnrolltmentsService {
+export class EnrollmentsService {
   constructor(private prisma: PrismaService) {}
 
   getByCourseAndStudentId({

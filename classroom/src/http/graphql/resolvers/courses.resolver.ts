@@ -1,7 +1,7 @@
 import { UnauthorizedException, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CoursesService } from '../../../services/courses.service';
-import { EnrolltmentsService } from '../../../services/enrollments.service';
+import { EnrollmentsService } from '../../../services/enrollments.service';
 import { StudentsService } from '../../../services/students.service';
 import { AuthorizationGuard } from '../../auth/authorization.guard';
 import { AuthUser, CurrentUser } from '../../auth/current-user';
@@ -13,7 +13,7 @@ export class CourseResolver {
   constructor(
     private coursesService: CoursesService,
     private studentsService: StudentsService,
-    private enrollmentsService: EnrolltmentsService,
+    private enrollmentsService: EnrollmentsService,
   ) {}
 
   @Query(() => [Course])

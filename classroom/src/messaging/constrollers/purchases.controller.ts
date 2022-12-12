@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { EventPattern, Payload } from '@nestjs/microservices';
 import { CoursesService } from '../../services/courses.service';
-import { EnrolltmentsService } from '../../services/enrollments.service';
+import { EnrollmentsService } from '../../services/enrollments.service';
 import { StudentsService } from '../../services/students.service';
 
 export interface Customer {
@@ -24,7 +24,7 @@ export class PurchaseController {
   constructor(
     private studentsService: StudentsService,
     private coursesService: CoursesService,
-    private enrolltmentsService: EnrolltmentsService,
+    private enrollmentsService: EnrollmentsService,
   ) {}
 
   @EventPattern('purchases.new-purchase')
@@ -50,7 +50,7 @@ export class PurchaseController {
       });
     }
 
-    await this.enrolltmentsService.createEnrollment({
+    await this.enrollmentsService.createEnrollment({
       courseId: course.id,
       studentId: student.id,
     });
