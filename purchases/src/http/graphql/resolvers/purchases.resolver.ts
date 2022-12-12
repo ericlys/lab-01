@@ -7,7 +7,7 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 
-import { Purchase } from '../model/purchase';
+import { Purchase } from '../models/purchase';
 import { PurchasesService } from '../../../services/purchases.service';
 import { UseGuards } from '@nestjs/common';
 import { AuthorizationGuard } from '../../auth/authorization.guard';
