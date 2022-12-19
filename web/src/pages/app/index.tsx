@@ -1,13 +1,21 @@
 import { withPageAuthRequired } from "@auth0/nextjs-auth0"
 import { useUser } from "@auth0/nextjs-auth0/client"
-import Link from "next/link";
+// import { useGetProductsQuery } from "../../graphql/generated/graphql";
+import { ssrGetProducts, getServerPageGetProducts } from "../../graphql/generated/page";
+import { withApollo } from "../../lib/withApollo";
 
-export default function Home(){
+
+
+function Home({data}){
   const { user } = useUser();
+  // const {data, loading, error} = useGetProductsQuery();
 
   return (
     <div>
       <h1>Hello World</h1>
+      <pre>
+        {JSON.stringify(data.products, null, 2)}
+      </pre>
       <pre>
         {JSON.stringify(user, null, 2)}
       </pre>
@@ -16,21 +24,12 @@ export default function Home(){
   )
 }
 
-export const getServerSideProps = withPageAuthRequired();
+export const getServerSideProps = withPageAuthRequired({
+  getServerSideProps: async (ctx) => {
+    return await getServerPageGetProducts({}, ctx)
+  }
+});
 
-// export const getServerSideProps: GetServerSideProps = async ({req, res}) => {
-//   const session = getSession(req, res);
-
-//   if(!session) {
-//     return {
-//       redirect: {
-//         destination: '/api/auth/login',
-//         permanent: false,
-//       }
-//     }
-//   }
-
-//   return {
-//     props: {}
-//   }
-// }
+export default withApollo(
+  ssrGetProducts.withPage()(Home) //Redux - High Order Components, compose
+);
