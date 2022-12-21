@@ -55,7 +55,7 @@ docker compose up -d
 ```
 npm i
 ```
--configure the .env of each project if needed
+- configure the .env of each project if needed
 ```
 - start the server
 ``` 
