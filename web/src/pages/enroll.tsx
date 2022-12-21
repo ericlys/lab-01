@@ -2,16 +2,27 @@ import Head from "next/head";
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
 import { GetStaticProps } from "next";
-import { withPublicApollo } from "../lib/withPublicApollo";
 import { getServerPageGetProducts, ssrGetProducts } from "../graphql/generated/pagePublic";
 
-import { GetProductsQuery } from "../graphql/generated/graphql";
+import { GetProductsQuery, useCreatePurchaseMutation } from "../graphql/generated/graphql";
+import { withApollo } from "../lib/withApollo";
 
 interface EnrollProps {
   data: GetProductsQuery;
 }
 
 function Enroll({ data }: EnrollProps) {
+  const [createPurchase] = useCreatePurchaseMutation()
+
+  async function handlePurchaseProduct(productId: string){
+    await createPurchase({
+      variables: {
+        productId
+      }
+    })
+
+    alert('Compra realizada com sucesso')
+  }
 
   return (
     <>
@@ -45,7 +56,7 @@ function Enroll({ data }: EnrollProps) {
                         </div>
                       </div>
                       <div className="ml-5 flex-shrink-0">
-                        <button onClick={() =>{}} className="px-2 py-1 border border-transparent text-base font-medium rounded-md text-white bg-violet-600 hover:bg-violet-700">
+                        <button onClick={() => handlePurchaseProduct(product.id)} className="px-2 py-1 border border-transparent text-base font-medium rounded-md text-white bg-violet-600 hover:bg-violet-700">
                           Realizar inscrição
                         </button>
                       </div>
@@ -71,6 +82,6 @@ export const getStaticProps: GetStaticProps = async ({}) => {
   }
 }
 
-export default withPublicApollo(
+export default withApollo(
   ssrGetProducts.withPage()(Enroll)
 )
