@@ -1,43 +1,23 @@
 import Head from "next/head";
-import { CalendarIcon } from "@heroicons/react/24/solid";
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
 import { GetStaticProps } from "next";
-import { withApollo } from "../lib/withApollo";
-import { ssrGetProducts } from "../graphql/generated/page";
-// import { withPublicApollo } from "../lib/withPublicApollo";
-// import { getServerPageGetProducts, ssrGetProducts } from "../graphql/generated/pagePublic";
-// import { GetProductsQuery, 
-  // useCreatePurchaseMutation 
-// }
-  //  from "../graphql/generated/graphql";
-// import { withApollo } from "../lib/withApollo";
+import { withPublicApollo } from "../lib/withPublicApollo";
+import { getServerPageGetProducts, ssrGetProducts } from "../graphql/generated/pagePublic";
 
-// interface EnrollProps {
-//   data: GetProductsQuery;
-// }
+import { GetProductsQuery } from "../graphql/generated/graphql";
 
-function Enroll() {
-  // const [createPurchase] = useCreatePurchaseMutation()
-  const data = {
-    products: []
-  }
+interface EnrollProps {
+  data: GetProductsQuery;
+}
 
-  // async function handlePurchaseProduct(productId: string) {
-  //   await createPurchase({
-  //     variables: {
-  //       productId,
-  //     }
-  //   })
-
-  //   alert('Compra realizada com sucesso!');
-  // }
+function Enroll({ data }: EnrollProps) {
 
   return (
     <>
       <Head>
         <title>Realizar matrícula</title>
-        {/* <link rel="shortcut icon" href="favicon.png" type="image/png" /> */}
+        <link rel="shortcut icon" href="favicon.png" type="image/png" />
       </Head>
 
       <div className="bg-white">
@@ -82,15 +62,15 @@ function Enroll() {
   )
 }
 
-// export const getStaticProps: GetStaticProps = async ({  }) => {
-//   // const data = await getServerPageGetProducts(undefined, {} as any)
+export const getStaticProps: GetStaticProps = async ({}) => {
+  const data = await getServerPageGetProducts({}, {} as any)
 
-//   return {
-//     props: {},
-//     revalidate: 60 * 60, // 1 hour
-//   }
-// }
+  return {
+    props: data.props,
+    revalidate: 60 * 60, // 1 hour
+  }
+}
 
-export default withApollo(
+export default withPublicApollo(
   ssrGetProducts.withPage()(Enroll)
 )
